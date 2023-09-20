@@ -15,7 +15,7 @@ jobs:
 
       - name: Use the test-secret in the workflow
         run: |
-          echo ${{ secrets.MY_SECRET }} >> .env
+          echo ${{ secrets.ENV_VARIABLES }} >> .env
       
       - name: env cat
         run: cat .env
