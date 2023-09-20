@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          GITHUB_WORKFLOW: ${{ secrets.GITHUB_WORKFLOW }}
 
-      - name: Use the test-secret in the workflow
-        run: |
-          echo ${{ secrets.ENV_VARIABLES }} >> .env
-      
-      - name: env cat
+      - name: ls
+        run: ls -al
+
+      - name: cat .env
         run: cat .env
 
       - name: Build docker
