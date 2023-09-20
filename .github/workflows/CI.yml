@@ -17,8 +17,7 @@ jobs:
         run: docker compose -f local.docker-compose.yml build
 
       - name: Run isort
-        run: docker compose run django ls /app
-        # run: docker compose run django isort euss_ya_apps/ --check --settings pyproject.toml
+        run: docker compose -f local.docker-compose.yml run django isort euss_ya_apps/ --check
 
       # - name: Run black
       #   run: docker compose run django black euss_ya_apps/ --check --settings pyproject.toml
