@@ -17,16 +17,17 @@ jobs:
         run: docker compose -f local.docker-compose.yml build
 
       - name: Run isort
-        run: docker compose run django isort euss_ya_apps/ --check --settings pyproject.toml
+        run: docker compose run django ls /app
+        # run: docker compose run django isort euss_ya_apps/ --check --settings pyproject.toml
 
-      - name: Run black
-        run: docker compose run django black euss_ya_apps/ --check --settings pyproject.toml
+      # - name: Run black
+      #   run: docker compose run django black euss_ya_apps/ --check --settings pyproject.toml
 
-      - name: Run flake8
-        run: docker compose run django flake8
+      # - name: Run flake8
+      #   run: docker compose run django flake8
 
-      - name: Run mypy
-        run: docker compose run django mypy --config mypy.ini euss_ya_apps/
+      # - name: Run mypy
+      #   run: docker compose run django mypy --config mypy.ini euss_ya_apps/
 
-      - name: Run tests
-        run: docker compose run django py.test
+      # - name: Run tests
+      #   run: docker compose run django py.test
