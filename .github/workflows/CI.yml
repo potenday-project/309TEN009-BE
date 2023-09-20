@@ -16,6 +16,9 @@ jobs:
       - name: Build docker
         run: docker compose -f local.docker-compose.yml build
 
+      - name: Migration test database
+        run: docker compose -f local.docker-compose.yml run django poetry run python manage.py migrate
+
       - name: Run isort
         run: docker compose -f local.docker-compose.yml run django poetry run isort euss_ya_apps/ --check
 

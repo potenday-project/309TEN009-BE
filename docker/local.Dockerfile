@@ -15,5 +15,3 @@ COPY pyproject.toml poetry.lock .
 RUN poetry install
 
 COPY . /app
-
-CMD ['poetry run python manage.py migrate']
