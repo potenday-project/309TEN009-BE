@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16.0
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=github_actions
+
+  django:
+    container_name: django
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    entrypoint: sh -c "poetry run python manage.py migrate && poetry run python manage.py runserve 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    expose:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: on-failure
