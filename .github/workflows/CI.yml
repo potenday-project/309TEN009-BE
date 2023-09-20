@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Use the test-secret in the workflow
         run: |
           echo ${{ secrets.MY_SECRET }} >> .env
-      - name: ls
-        run: ls -la
-      - name: pwd
-        run: pwd
 
       - name: Build docker
         run: docker compose -f local.docker-compose.yml build
+
+      - name: docker ls
+        run: docker compose -f local.docker-compose.yml run django ls -al
 
       - name: Run isort
         run: docker compose -f local.docker-compose.yml run django isort euss_ya_apps/ --check
