@@ -13,7 +13,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && curl -sSL https://install.python-poetry.org | python3 -
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock .
 
 RUN poetry install
 
