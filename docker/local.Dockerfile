@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /app/
 WORKDIR /app/
 
-RUN apt update
+RUN apt-update
 COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -15,3 +15,5 @@ COPY pyproject.toml poetry.lock .
 RUN poetry install
 
 COPY . /app
+
+CMD ['poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000']
