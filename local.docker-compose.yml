@@ -15,6 +15,10 @@ services:
       context: .
       dockerfile: docker/local.Dockerfile
     entrypoint: sh -c "poetry run python manage.py migrate && poetry run python manage.py runserve 0.0.0.0:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=django-insecure-hwd0q$q^d9uaxfgai!(y=$1_fv&69^4ox!^!fq=h%h$o=8mpz4
+      - GITHUB_WORKFLOW=True
+      - DEBUG=True
     volumes:
       - .:/app
     expose:
