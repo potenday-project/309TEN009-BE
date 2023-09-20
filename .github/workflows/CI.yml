@@ -12,14 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Use the test-secret in the workflow
+        run: |
+          echo ${{ secrets.MY_SECRET }} >> .env
       - name: ls
         run: ls -la
       - name: pwd
         run: pwd
-
-      # - name: Use the test-secret in the workflow
-      #   run: |
-      #     echo ${{ secrets.MY_SECRET }} >> path/to/secret_file.txt
 
       - name: Build docker
         run: docker compose -f local.docker-compose.yml build
