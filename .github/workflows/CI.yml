@@ -12,6 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: ls
+        run: ls -la
+      - name: pwd
+        run: pwd
+
+      # - name: Use the test-secret in the workflow
+      #   run: |
+      #     echo ${{ secrets.MY_SECRET }} >> path/to/secret_file.txt
 
       - name: Build docker
         run: docker compose -f local.docker-compose.yml build
@@ -20,13 +28,13 @@ jobs:
         run: docker compose -f local.docker-compose.yml run django isort euss_ya_apps/ --check
 
       # - name: Run black
-      #   run: docker compose run django black euss_ya_apps/ --check --settings pyproject.toml
+      #   run: docker compose -f local.docker-compose.yml run django black euss_ya_apps/ --check --settings pyproject.toml
 
       # - name: Run flake8
-      #   run: docker compose run django flake8
+      #   run: docker compose -f local.docker-compose.yml run django flake8
 
       # - name: Run mypy
-      #   run: docker compose run django mypy --config mypy.ini euss_ya_apps/
+      #   run: docker compose -f local.docker-compose.yml run django mypy --config mypy.ini euss_ya_apps/
 
       # - name: Run tests
-      #   run: docker compose run django py.test
+      #   run: docker compose -f local.docker-compose.yml run django py.test
