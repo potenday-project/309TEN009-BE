@@ -1,0 +1,108 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  django-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build docker
+        run: docker compose -f local.docker-compose.yml build
+      - name: Run isort
+        run: docker compose run django isort euss_ya_apps/ --check
+      - name: Run black
+        run: docker compose run django black euss_ya_apps/ --check
+      - name: Run flake8
+        run: docker compose run django flake8
+      - name: Run mypy
+        run: docker compose run django mypy --config mypy.ini euss_ya_apps/
+      - name: Run tests
+        run: docker compose run django py.test
+  # django-test:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     max-parallel: 4
+  #     matrix:
+  #       python-version: [3.11.5]
+
+    # steps:
+    # - uses: actions/checkout@v3
+    # - name: Set up Python ${{ matrix.python-version }}
+    #   uses: actions/setup-python@v3
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
+
+    # - name: Install Poetry
+    #   run: |
+    #     curl -sSL https://install.python-poetry.org | python -
+
+    # - name: Install Dependencies
+    #   run: |
+    #     poetry install
+
+    # - name: Run isort
+    #   uses: isort/isort-action@master
+
+    # - name: Run black
+    #   uses: psf/black@stable
+    #   args: ['-l', '150', '-t', 'py311']
+
+    # - name: Run flake8
+    #   run: flake8
+
+    # - name: Type check
+    #   run: |
+    #     poetry run mypy --config mypy.ini .
+
+    # - name: Run tests
+    #   run: |
+    #     poetry run pytest
+
+  docker-build:
+    needs: django-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Docker meta
+      id: docker_meta
+      uses: crazy-max/ghaction-docker-meta@v1
+      with:
+        images: wogur981208/django
+        tag-semver: |
+          {{version}}
+          {{major}}.{{minor}}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        file: ./docker/Dockerfile
+        platform: linux/amd64
+        push: true
+        tags: ${{ steps.docker_meta.outputs.tags }}
+        labels: ${{ steps.docker_meta.outputs.labels }}
+
+  deploy-to-ec2:
+    needs: docker-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          host: ${{ secrets.AWS_EC2_IP }}
+          username: ${{ secrets.AWS_EC2_NAME }}
+          port: ${{ secrets.AWS_EC2_PORT }}
+          script: |
+            sh deploy.sh
