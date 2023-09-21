@@ -21,7 +21,7 @@ services:
     container_name: django
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/prod.Dockerfile
     image: wogur981208/django:latest
     entrypoint: sh -c "poetry run python manage.py collectstatic --no-input && poetry run python manage.py migrate && poetry run gunicorn config.wsgi --workers=5 -b 0.0.0.0:8000"
     volumes:

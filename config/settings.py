@@ -15,7 +15,12 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "euss_ya.users",
+    "euss_ya.exercises",
+    "euss_ya.common",
+    "euss_ya.core",
+]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
