@@ -24,6 +24,7 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "drf_yasg",
 ]
 
 INSTALLED_APPS = [
@@ -134,3 +135,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Swagger
+SWAGGER_SETTINGS = {"SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}}}
